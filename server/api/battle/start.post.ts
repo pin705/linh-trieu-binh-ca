@@ -136,13 +136,28 @@ export default defineEventHandler(async (event) => {
       defense: card.currentDefense,
     }))
 
-    const opponentDeckSnapshot = opponentDeck.map((card: any) => ({
-      cardId: card._id || null,
-      templateId: card.template?._id || card.templateId,
-      level: card.level,
-      attack: card.currentAttack || card.attack,
-      defense: card.currentDefense || card.defense,
-    }))
+    const opponentDeckSnapshot = opponentDeck.map((card: any) => {
+      // Handle both PvP (real cards) and PvE (AI generated cards)
+      if (card._id) {
+        // Real player card
+        return {
+          cardId: card._id,
+          templateId: card.template._id,
+          level: card.level,
+          attack: card.currentAttack,
+          defense: card.currentDefense,
+        }
+      } else {
+        // AI generated card
+        return {
+          cardId: null,
+          templateId: card.templateId,
+          level: card.level,
+          attack: card.attack,
+          defense: card.defense,
+        }
+      }
+    })
 
     // Calculate rewards
     const rewards = calculateRewards(battleResult.winner, player.level)
@@ -153,6 +168,10 @@ export default defineEventHandler(async (event) => {
       player.experience += rewards.experience
       await player.save()
     }
+
+    // Calculate battle completion time
+    const startTime = new Date()
+    const endTime = new Date(startTime.getTime() + 1000) // Battle takes ~1 second
 
     // Create battle record
     const battle = await BattleSchema.create({
@@ -167,8 +186,8 @@ export default defineEventHandler(async (event) => {
       rounds: battleResult.rounds,
       rewards,
       energyCost: 10,
-      startedAt: new Date(),
-      completedAt: new Date(),
+      startedAt: startTime,
+      completedAt: endTime,
     })
 
     return {

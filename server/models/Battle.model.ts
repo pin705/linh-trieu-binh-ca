@@ -133,12 +133,6 @@ export const BattleSchema = defineMongooseModel({
     },
     completedAt: {
       type: 'date',
-      default: () => new Date(),
-      required: true,
-    },
-    createdAt: {
-      type: 'date',
-      default: () => new Date(),
       required: true,
     },
   },

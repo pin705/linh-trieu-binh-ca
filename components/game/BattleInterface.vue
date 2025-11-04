@@ -33,6 +33,10 @@
           type="text"
           placeholder="Enter opponent's user ID"
         />
+        <p class="input-hint">
+          💡 Tip: You can find user IDs from your battle history or friends list.
+          For now, PvP requires knowing the opponent's ID.
+        </p>
       </div>
 
       <div class="energy-cost">
@@ -311,6 +315,13 @@ const viewHistory = async () => {
   border-radius: 4px;
   font-size: 1rem;
   box-sizing: border-box;
+}
+
+.input-hint {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  font-style: italic;
 }
 
 .energy-cost {
