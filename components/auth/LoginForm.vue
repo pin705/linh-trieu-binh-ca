@@ -1,42 +1,54 @@
 <template>
-  <div class="login-form">
-    <h2>Login</h2>
-    <form @submit.prevent="handleLogin">
-      <div class="form-group">
-        <label for="login">Email or Username</label>
+  <div class="max-w-md w-full mx-auto bg-white rounded-lg shadow-xl p-8">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Đăng Nhập Trang Quan</h2>
+    <form @submit.prevent="handleLogin" class="space-y-4">
+      <div>
+        <label for="login" class="block text-sm font-medium text-gray-700 mb-1">
+          Danh Hiệu hoặc Thư Tín
+        </label>
         <input
           id="login"
           v-model="formData.login"
           type="text"
-          placeholder="Enter email or username"
+          placeholder="Nhập danh hiệu hoặc thư tín"
           required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
         />
       </div>
       
-      <div class="form-group">
-        <label for="password">Password</label>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+          Ấn Tín Mật
+        </label>
         <input
           id="password"
           v-model="formData.password"
           type="password"
-          placeholder="Enter password"
+          placeholder="Nhập ấn tín mật"
           required
           minlength="8"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
         />
       </div>
 
-      <div v-if="error" class="error-message">
+      <div v-if="error" class="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-sm">
         {{ error }}
       </div>
 
-      <button type="submit" :disabled="loading">
-        {{ loading ? 'Logging in...' : 'Login' }}
+      <button 
+        type="submit" 
+        :disabled="loading"
+        class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+      >
+        {{ loading ? 'Đang xác thực...' : 'Tiến Vào Triều Đình' }}
       </button>
     </form>
 
-    <p class="switch-form">
-      Don't have an account? 
-      <a @click="$emit('switch-to-register')">Register here</a>
+    <p class="text-center mt-6 text-gray-600 text-sm">
+      Chưa có trang quan? 
+      <a @click="$emit('switch-to-register')" class="text-purple-600 hover:text-purple-800 cursor-pointer underline">
+        Đăng ký ngay
+      </a>
     </p>
   </div>
 </template>
@@ -75,89 +87,4 @@ const handleLogin = async () => {
 }
 </script>
 
-<style scoped>
-.login-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-h2 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #34495e;
-  font-weight: 500;
-}
-
-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-input:focus {
-  outline: none;
-  border-color: #3498db;
-}
-
-button {
-  width: 100%;
-  padding: 0.75rem;
-  background: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:hover:not(:disabled) {
-  background: #2980b9;
-}
-
-button:disabled {
-  background: #95a5a6;
-  cursor: not-allowed;
-}
-
-.error-message {
-  padding: 0.75rem;
-  background: #fee;
-  color: #c00;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-
-.switch-form {
-  text-align: center;
-  margin-top: 1rem;
-  color: #7f8c8d;
-}
-
-.switch-form a {
-  color: #3498db;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.switch-form a:hover {
-  color: #2980b9;
-}
-</style>

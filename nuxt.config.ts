@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   
   modules: [
     'nuxt-mongoose',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    '@nuxtjs/tailwindcss'
   ],
 
   mongoose: {

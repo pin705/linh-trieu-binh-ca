@@ -1,67 +1,85 @@
 <template>
-  <div class="register-form">
-    <h2>Register</h2>
-    <form @submit.prevent="handleRegister">
-      <div class="form-group">
-        <label for="email">Email</label>
+  <div class="max-w-md w-full mx-auto bg-white rounded-lg shadow-xl p-8">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Thiết Lập Trang Quan</h2>
+    <form @submit.prevent="handleRegister" class="space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+          Thư Tín
+        </label>
         <input
           id="email"
           v-model="formData.email"
           type="email"
-          placeholder="Enter your email"
+          placeholder="Nhập địa chỉ thư tín"
           required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
         />
       </div>
 
-      <div class="form-group">
-        <label for="username">Username</label>
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
+          Danh Hiệu
+        </label>
         <input
           id="username"
           v-model="formData.username"
           type="text"
-          placeholder="Choose a username (3-20 chars)"
+          placeholder="Chọn danh hiệu (3-20 ký tự)"
           required
           minlength="3"
           maxlength="20"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
         />
       </div>
       
-      <div class="form-group">
-        <label for="password">Password</label>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+          Ấn Tín Mật
+        </label>
         <input
           id="password"
           v-model="formData.password"
           type="password"
-          placeholder="Choose a password (min 8 chars)"
+          placeholder="Chọn ấn tín mật (tối thiểu 8 ký tự)"
           required
           minlength="8"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
         />
       </div>
 
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
+      <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+          Xác Nhận Ấn Tín
+        </label>
         <input
           id="confirmPassword"
           v-model="formData.confirmPassword"
           type="password"
-          placeholder="Confirm your password"
+          placeholder="Nhập lại ấn tín mật"
           required
           minlength="8"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
         />
       </div>
 
-      <div v-if="error" class="error-message">
+      <div v-if="error" class="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-sm">
         {{ error }}
       </div>
 
-      <button type="submit" :disabled="loading">
-        {{ loading ? 'Creating Account...' : 'Register' }}
+      <button 
+        type="submit" 
+        :disabled="loading"
+        class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+      >
+        {{ loading ? 'Đang thiết lập...' : 'Gia Nhập Triều Đình' }}
       </button>
     </form>
 
-    <p class="switch-form">
-      Already have an account? 
-      <a @click="$emit('switch-to-login')">Login here</a>
+    <p class="text-center mt-6 text-gray-600 text-sm">
+      Đã có trang quan? 
+      <a @click="$emit('switch-to-login')" class="text-purple-600 hover:text-purple-800 cursor-pointer underline">
+        Đăng nhập ngay
+      </a>
     </p>
   </div>
 </template>
@@ -85,7 +103,7 @@ const handleRegister = async () => {
 
   // Validate passwords match
   if (formData.value.password !== formData.value.confirmPassword) {
-    error.value = 'Passwords do not match'
+    error.value = 'Ấn tín mật không khớp'
     loading.value = false
     return
   }
@@ -103,99 +121,14 @@ const handleRegister = async () => {
     if (response.success) {
       emit('register-success', response.user)
     } else {
-      error.value = 'Registration failed. Please try again.'
+      error.value = 'Thiết lập thất bại. Vui lòng thử lại.'
     }
   } catch (err: any) {
-    error.value = err.data?.message || 'Registration failed'
+    error.value = err.data?.message || 'Thiết lập thất bại'
   } finally {
     loading.value = false
   }
 }
 </script>
 
-<style scoped>
-.register-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-h2 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #34495e;
-  font-weight: 500;
-}
-
-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  box-sizing: border-box;
-}
-
-input:focus {
-  outline: none;
-  border-color: #3498db;
-}
-
-button {
-  width: 100%;
-  padding: 0.75rem;
-  background: #27ae60;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:hover:not(:disabled) {
-  background: #229954;
-}
-
-button:disabled {
-  background: #95a5a6;
-  cursor: not-allowed;
-}
-
-.error-message {
-  padding: 0.75rem;
-  background: #fee;
-  color: #c00;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-
-.switch-form {
-  text-align: center;
-  margin-top: 1rem;
-  color: #7f8c8d;
-}
-
-.switch-form a {
-  color: #3498db;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.switch-form a:hover {
-  color: #2980b9;
-}
-</style>

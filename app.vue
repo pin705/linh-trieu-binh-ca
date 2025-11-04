@@ -1,13 +1,13 @@
 <template>
-  <div id="app">
-    <div class="app-header">
-      <h1>🎴 Linh Triều Bình Ca</h1>
-      <p class="tagline">Modern Card Battle Game</p>
+  <div id="app" class="min-h-screen flex flex-col bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800">
+    <div class="text-center py-6 px-4 text-white">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2 drop-shadow-lg">🎴 Linh Triều Bình Ca</h1>
+      <p class="text-lg md:text-xl opacity-90">Thiên Hạ Anh Hùng - Quyết Đấu Giang Hồ</p>
     </div>
 
-    <div class="app-container">
+    <div class="flex-1 px-4 py-6">
       <!-- Authentication Screen -->
-      <div v-if="!user && currentView === 'auth'" class="auth-container">
+      <div v-if="!user && currentView === 'auth'" class="flex justify-center items-center min-h-[400px]">
         <LoginForm
           v-if="authMode === 'login'"
           @login-success="handleLoginSuccess"
@@ -21,7 +21,7 @@
       </div>
 
       <!-- Main Game Interface -->
-      <div v-else-if="user" class="game-container">
+      <div v-else-if="user" class="max-w-7xl mx-auto">
         <!-- Dashboard -->
         <UserDashboard
           v-if="currentView === 'dashboard'"
@@ -52,14 +52,14 @@
       </div>
 
       <!-- Loading State -->
-      <div v-else class="loading-container">
-        <div class="loading-spinner"></div>
-        <p>Loading...</p>
+      <div v-else class="flex flex-col justify-center items-center min-h-[400px] text-white">
+        <div class="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+        <p class="mt-4">Đang tải...</p>
       </div>
     </div>
 
-    <footer class="app-footer">
-      <p>© 2024 Linh Triều Bình Ca | Built with Nuxt 3 & MongoDB</p>
+    <footer class="text-center py-6 text-white/80 text-sm">
+      <p>© 2024 Linh Triều Bình Ca | Xây dựng với Nuxt 3 & MongoDB</p>
     </footer>
   </div>
 </template>
@@ -129,89 +129,5 @@ const handleRemoveFromDeck = async (card: any) => {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-}
-
-#app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.app-header {
-  text-align: center;
-  padding: 2rem 1rem 1rem;
-  color: white;
-}
-
-.app-header h1 {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.tagline {
-  font-size: 1.2rem;
-  opacity: 0.9;
-}
-
-.app-container {
-  flex: 1;
-  padding: 1rem;
-}
-
-.auth-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
-
-.game-container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-  color: white;
-}
-
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.app-footer {
-  text-align: center;
-  padding: 1.5rem;
-  color: white;
-  opacity: 0.8;
-  font-size: 0.9rem;
-}
-
-@media (max-width: 768px) {
-  .app-header h1 {
-    font-size: 2rem;
-  }
-  
-  .tagline {
-    font-size: 1rem;
-  }
 }
 </style>

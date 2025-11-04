@@ -1,87 +1,112 @@
 <template>
-  <div class="deck-builder">
-    <div class="builder-header">
-      <h2>Deck Builder</h2>
-      <button class="back-btn" @click="$emit('back')">← Back</button>
+  <div class="max-w-7xl mx-auto p-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Xây Dựng Đội Hình</h2>
+      <button 
+        @click="$emit('back')"
+        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+      >
+        ← Quay Lại
+      </button>
     </div>
 
-    <div v-if="loading" class="loading">Loading deck...</div>
+    <div v-if="loading" class="text-center py-12 text-gray-500">
+      Đang tải đội hình...
+    </div>
 
-    <div v-else-if="error" class="error-message">{{ error }}</div>
+    <div v-else-if="error" class="text-center py-12 text-red-600">
+      {{ error }}
+    </div>
 
-    <div v-else class="builder-content">
-      <div class="current-deck">
-        <h3>Current Deck ({{ deckCards.length }} cards)</h3>
-        <div v-if="deckCards.length === 0" class="empty-deck">
-          Your deck is empty. Add cards from your collection!
+    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-lg shadow-xl p-6">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Đội Hình Hiện Tại ({{ deckCards.length }} linh bài)</h3>
+        
+        <div v-if="deckCards.length === 0" class="text-center py-8 text-gray-500">
+          Đội hình trống. Thêm linh bài từ bảo khố!
         </div>
-        <div v-else class="deck-cards">
+        
+        <div v-else class="space-y-3 mb-6">
           <div
             v-for="card in deckCards"
             :key="card._id"
-            class="deck-card"
+            class="bg-gray-50 rounded-lg p-4 relative"
           >
-            <div class="card-mini">
-              <span class="position-badge">{{ card.deckPosition }}</span>
-              <h4>{{ card.template.name }}</h4>
-              <div class="mini-stats">
-                <span>⚔️ {{ card.currentAttack }}</span>
-                <span>🛡️ {{ card.currentDefense }}</span>
-              </div>
-              <button
-                @click="removeFromDeck(card)"
-                class="remove-btn"
-              >
-                Remove
-              </button>
+            <span class="absolute top-3 right-3 bg-blue-500 text-white w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold">
+              {{ card.deckPosition }}
+            </span>
+            <h4 class="font-bold text-gray-800 mb-2 pr-10">{{ card.template.name }}</h4>
+            <div class="flex gap-4 text-sm text-gray-600 mb-3">
+              <span>⚔️ {{ card.currentAttack }}</span>
+              <span>🛡️ {{ card.currentDefense }}</span>
             </div>
+            <button
+              @click="removeFromDeck(card)"
+              class="w-full bg-red-500 text-white py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors"
+            >
+              Loại Bỏ
+            </button>
           </div>
         </div>
 
-        <div class="deck-stats">
-          <div class="stat">
-            <span>Total Attack:</span>
-            <strong>{{ totalAttack }}</strong>
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg p-4">
+          <div class="flex justify-between py-2 border-b border-white/20">
+            <span>Tổng Tấn Công:</span>
+            <strong class="text-lg">{{ totalAttack }}</strong>
           </div>
-          <div class="stat">
-            <span>Total Defense:</span>
-            <strong>{{ totalDefense }}</strong>
+          <div class="flex justify-between py-2 border-b border-white/20">
+            <span>Tổng Phòng Thủ:</span>
+            <strong class="text-lg">{{ totalDefense }}</strong>
           </div>
-          <div class="stat">
-            <span>Power Rating:</span>
-            <strong>{{ totalAttack + totalDefense }}</strong>
+          <div class="flex justify-between py-2">
+            <span>Tổng Sức Mạnh:</span>
+            <strong class="text-xl">{{ totalAttack + totalDefense }}</strong>
           </div>
         </div>
       </div>
 
-      <div class="available-cards">
-        <h3>Available Cards</h3>
-        <div v-if="availableCards.length === 0" class="no-cards">
-          All your cards are already in the deck!
+      <div class="bg-white rounded-lg shadow-xl p-6">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Linh Bài Khả Dụng</h3>
+        
+        <div v-if="availableCards.length === 0" class="text-center py-8 text-gray-500">
+          Tất cả linh bài đã có trong đội hình!
         </div>
-        <div v-else class="cards-list">
+        
+        <div v-else class="space-y-3 max-h-[600px] overflow-y-auto pr-2" role="list" aria-label="Danh sách linh bài khả dụng">
           <div
             v-for="card in availableCards"
             :key="card._id"
-            class="available-card"
+            class="bg-gray-50 rounded-lg p-4"
           >
-            <h4>{{ card.template.name }}</h4>
-            <div class="card-details">
-              <span class="rarity" :class="card.template.rarity">
+            <h4 class="font-bold text-gray-800 mb-2">{{ card.template.name }}</h4>
+            <div class="flex gap-3 mb-2 text-sm">
+              <span 
+                class="px-2 py-1 rounded text-xs font-bold uppercase text-white"
+                :class="{
+                  'bg-gray-500': card.template.rarity === 'common',
+                  'bg-green-500': card.template.rarity === 'uncommon',
+                  'bg-blue-500': card.template.rarity === 'rare',
+                  'bg-purple-500': card.template.rarity === 'epic',
+                  'bg-yellow-500': card.template.rarity === 'legendary'
+                }"
+              >
                 {{ card.template.rarity }}
               </span>
-              <span>Lvl {{ card.level }}</span>
+              <span class="text-gray-600">Cấp {{ card.level }}</span>
             </div>
-            <div class="mini-stats">
+            <div class="flex gap-4 text-sm text-gray-600 mb-3">
               <span>⚔️ {{ card.currentAttack }}</span>
               <span>🛡️ {{ card.currentDefense }}</span>
             </div>
             <button
               @click="addToDeck(card)"
-              class="add-btn"
               :disabled="card.isLocked"
+              class="w-full py-2 rounded-lg text-sm font-medium transition-colors"
+              :class="card.isLocked 
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                : 'bg-green-500 text-white hover:bg-green-600'"
             >
-              {{ card.isLocked ? '🔒 Locked' : 'Add to Deck' }}
+              {{ card.isLocked ? '🔒 Đã Khóa' : 'Thêm Vào Đội Hình' }}
             </button>
           </div>
         </div>
@@ -124,10 +149,10 @@ const loadCards = async () => {
       
       availableCards.value = response.data.filter((card: any) => !card.isInDeck)
     } else {
-      error.value = 'Failed to load cards'
+      error.value = 'Không thể tải linh bài'
     }
   } catch (err: any) {
-    error.value = err.data?.message || 'Failed to load cards'
+    error.value = err.data?.message || 'Không thể tải linh bài'
   } finally {
     loading.value = false
   }
@@ -151,7 +176,7 @@ const addToDeck = async (card: any) => {
       await loadCards()
     }
   } catch (err: any) {
-    error.value = err.data?.message || 'Failed to add card to deck'
+    error.value = err.data?.message || 'Không thể thêm linh bài vào đội hình'
   }
 }
 
@@ -167,7 +192,7 @@ const removeFromDeck = async (card: any) => {
       await loadCards()
     }
   } catch (err: any) {
-    error.value = err.data?.message || 'Failed to remove card from deck'
+    error.value = err.data?.message || 'Không thể loại bỏ linh bài khỏi đội hình'
   }
 }
 
@@ -176,231 +201,3 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.deck-builder {
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.builder-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.builder-header h2 {
-  color: #2c3e50;
-  margin: 0;
-}
-
-.back-btn {
-  padding: 0.5rem 1rem;
-  background: #95a5a6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.back-btn:hover {
-  background: #7f8c8d;
-}
-
-.loading, .error-message {
-  text-align: center;
-  padding: 2rem;
-  color: #7f8c8d;
-}
-
-.error-message {
-  color: #e74c3c;
-}
-
-.builder-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-
-.current-deck, .available-cards {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-h3 {
-  color: #2c3e50;
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-}
-
-.empty-deck, .no-cards {
-  text-align: center;
-  padding: 2rem;
-  color: #95a5a6;
-}
-
-.deck-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.deck-card {
-  position: relative;
-}
-
-.card-mini {
-  background: #ecf0f1;
-  padding: 1rem;
-  border-radius: 4px;
-  position: relative;
-}
-
-.position-badge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: #3498db;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.card-mini h4 {
-  margin: 0 0 0.5rem 0;
-  color: #2c3e50;
-}
-
-.mini-stats {
-  display: flex;
-  gap: 1rem;
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
-}
-
-.remove-btn, .add-btn {
-  width: 100%;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  margin-top: 0.5rem;
-}
-
-.remove-btn {
-  background: #e74c3c;
-  color: white;
-}
-
-.remove-btn:hover {
-  background: #c0392b;
-}
-
-.add-btn {
-  background: #27ae60;
-  color: white;
-}
-
-.add-btn:hover:not(:disabled) {
-  background: #229954;
-}
-
-.add-btn:disabled {
-  background: #95a5a6;
-  cursor: not-allowed;
-}
-
-.deck-stats {
-  padding: 1rem;
-  background: #3498db;
-  color: white;
-  border-radius: 4px;
-}
-
-.deck-stats .stat {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.deck-stats .stat:last-child {
-  border-bottom: none;
-}
-
-.cards-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-height: 600px;
-  overflow-y: auto;
-}
-
-.available-card {
-  background: #ecf0f1;
-  padding: 1rem;
-  border-radius: 4px;
-}
-
-.available-card h4 {
-  margin: 0 0 0.5rem 0;
-  color: #2c3e50;
-}
-
-.card-details {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.rarity {
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.rarity.common {
-  background: #95a5a6;
-  color: white;
-}
-
-.rarity.uncommon {
-  background: #27ae60;
-  color: white;
-}
-
-.rarity.rare {
-  background: #3498db;
-  color: white;
-}
-
-.rarity.epic {
-  background: #9b59b6;
-  color: white;
-}
-
-.rarity.legendary {
-  background: #f39c12;
-  color: white;
-}
-
-@media (max-width: 768px) {
-  .builder-content {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
