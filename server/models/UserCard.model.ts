@@ -65,8 +65,8 @@ export const UserCardSchema = defineMongooseModel({
     },
     deckPosition: {
       type: 'number',
-      default: null, // Position in deck (1-n), null if not in deck
-      min: null,
+      default: undefined, // Position in deck (1-n), undefined if not in deck
+      min: 1,
     },
     
     // Enhancement history
@@ -122,7 +122,7 @@ export const UserCardSchema = defineMongooseModel({
     },
     lastUsedAt: {
       type: 'date',
-      default: null,
+      default: undefined,
     },
   },
   options: {
@@ -145,7 +145,7 @@ export const UserCardSchema = defineMongooseModel({
       
       // If not in deck, clear deck position
       if (!this.isInDeck) {
-        this.deckPosition = null;
+        this.deckPosition = undefined;
       }
       
       next();
@@ -201,7 +201,7 @@ export const UserCardSchema = defineMongooseModel({
     // Method to remove card from deck
     schema.methods.removeFromDeck = async function() {
       this.isInDeck = false;
-      this.deckPosition = null;
+      this.deckPosition = undefined;
       await this.save();
       return this;
     };
