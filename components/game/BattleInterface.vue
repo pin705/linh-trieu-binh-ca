@@ -179,7 +179,7 @@
               <div class="flex justify-between mb-2">
                 <span class="font-bold text-gray-800">{{ battle.battleType.toUpperCase() }}</span>
                 <span class="text-sm text-gray-500">
-                  {{ new Date(battle.createdAt).toLocaleDateString('vi-VN') }}
+                  {{ formatDate(battle.createdAt) }}
                 </span>
               </div>
               <div class="text-lg font-bold text-gray-800 mb-1">
@@ -208,6 +208,14 @@ const result = ref<any>(null)
 const showHistory = ref(false)
 const history = ref<any[]>([])
 const historyLoading = ref(false)
+
+const formatDate = (dateString: string) => {
+  try {
+    return new Date(dateString).toLocaleDateString('vi-VN')
+  } catch {
+    return new Date(dateString).toLocaleDateString()
+  }
+}
 
 const startBattle = async () => {
   loading.value = true

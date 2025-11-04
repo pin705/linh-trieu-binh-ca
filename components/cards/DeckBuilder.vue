@@ -72,7 +72,7 @@
           Tất cả linh bài đã có trong đội hình!
         </div>
         
-        <div v-else class="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+        <div v-else class="space-y-3 max-h-[600px] overflow-y-auto pr-2" role="list" aria-label="Danh sách linh bài khả dụng">
           <div
             v-for="card in availableCards"
             :key="card._id"

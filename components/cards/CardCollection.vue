@@ -22,13 +22,13 @@
         <option value="currentDefense">Sắp xếp: Phòng thủ</option>
       </select>
 
-      <label class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
-        <input type="checkbox" v-model="filters.inDeckOnly" @change="loadCards" class="w-4 h-4" />
+      <label for="filter-deck" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+        <input id="filter-deck" type="checkbox" v-model="filters.inDeckOnly" @change="loadCards" class="w-4 h-4" />
         <span class="text-sm text-gray-700">Chỉ trong đội hình</span>
       </label>
 
-      <label class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
-        <input type="checkbox" v-model="filters.lockedOnly" @change="loadCards" class="w-4 h-4" />
+      <label for="filter-locked" class="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+        <input id="filter-locked" type="checkbox" v-model="filters.lockedOnly" @change="loadCards" class="w-4 h-4" />
         <span class="text-sm text-gray-700">Chỉ đã khóa</span>
       </label>
     </div>
