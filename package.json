@@ -12,9 +12,11 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@types/bcrypt": "^6.0.0",
     "nuxt": "^3.14.0"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "mongoose": "^8.19.2",
     "nuxt-auth-utils": "^0.5.25",
     "nuxt-mongoose": "^1.0.6"
