@@ -36,16 +36,39 @@ Linh Triều Bình Ca là một game thẻ bài full-stack hiện đại, đư�
   - Không cần background jobs
 
 - **API Endpoints**
-  - `GET /api/cards/templates` - Lấy danh sách thẻ bài
-  - `POST /api/admin/seed` - Seed database với dữ liệu ban đầu
+  - Authentication: `/api/auth/*` (register, login, logout, session)
+  - Card Templates: `/api/cards/templates` (get all cards)
+  - User Cards: `/api/user/cards/*` (collection, fuse, deck, lock)
+  - Battle System: `/api/battle/*` (start, history)
+  - Admin: `/api/admin/seed` (seed database)
 
-### 🚧 Đang Phát Triển
+### ✅ Mới Hoàn Thành (v2.0)
 
-- Hệ thống đăng nhập/đăng ký
-- Card collection management
-- Deck builder
-- Battle system
-- UI components
+**Hệ Thống Xác Thực:**
+- Đăng ký tài khoản với email/username
+- Đăng nhập/đăng xuất
+- Quản lý session tự động
+- Mã hóa mật khẩu với bcrypt
+
+**Quản Lý Thẻ Bài:**
+- Xem bộ sưu tập thẻ bài cá nhân
+- Nâng cấp thẻ thông qua fusion
+- Quản lý bộ bài (deck builder)
+- Khóa/mở khóa thẻ quan trọng
+
+**Hệ Thống Chiến Đấu:**
+- PvE: Chiến đấu với AI
+- PvP: Chiến đấu với người chơi khác
+- Tính toán chiến đấu tự động
+- Hệ thống phần thưởng (vàng, kinh nghiệm)
+- Lịch sử chiến đấu
+
+**Giao Diện Người Dùng:**
+- Form đăng nhập/đăng ký
+- Dashboard hiển thị thống kê
+- Trình xem bộ sưu tập thẻ
+- Công cụ xây dựng bộ bài
+- Giao diện chiến đấu
 
 ## Cài Đặt và Khởi Chạy
 
@@ -123,47 +146,46 @@ linh-trieu-binh-ca/
 
 ## API Documentation
 
-### GET /api/cards/templates
+Xem chi tiết đầy đủ tại [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
 
-Lấy danh sách tất cả thẻ bài.
+### Quick Examples
 
-**Query Parameters:**
-- `rarity`: Lọc theo độ hiếm (common, uncommon, rare, epic, legendary)
-- `element`: Lọc theo nguyên tố (fire, water, earth, wind, light, dark, neutral)
-- `isActive`: Chỉ hiển thị thẻ đang active (default: true)
-
-**Example:**
+**Register a new user:**
 ```bash
-# Lấy tất cả thẻ
-curl http://localhost:3000/api/cards/templates
-
-# Lấy thẻ Legendary
-curl http://localhost:3000/api/cards/templates?rarity=legendary
-
-# Lấy thẻ Fire
-curl http://localhost:3000/api/cards/templates?element=fire
-```
-
-### POST /api/admin/seed
-
-Seed database với thẻ bài ban đầu.
-
-**Body:**
-```json
-{
-  "force": false  // true để xóa và seed lại
-}
-```
-
-**Example:**
-```bash
-# Seed lần đầu
-curl -X POST http://localhost:3000/api/admin/seed
-
-# Force reseed
-curl -X POST http://localhost:3000/api/admin/seed \
+curl -X POST http://localhost:3000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"force": true}'
+  -d '{
+    "email": "user@example.com",
+    "username": "player1",
+    "password": "password123"
+  }'
+```
+
+**Login:**
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "login": "player1",
+    "password": "password123"
+  }'
+```
+
+**Get card templates:**
+```bash
+curl http://localhost:3000/api/cards/templates
+```
+
+**Start a PvE battle:**
+```bash
+curl -X POST http://localhost:3000/api/battle/start \
+  -H "Content-Type: application/json" \
+  -d '{"battleType": "pve"}'
+```
+
+**Seed database (first time only):**
+```bash
+curl -X POST http://localhost:3000/api/admin/seed
 ```
 
 ## Thẻ Bài Ban Đầu

@@ -119,21 +119,36 @@ Expected response:
 }
 ```
 
-### 7. Test the API
+### 7. Access the Game UI
+
+Open your browser and navigate to: **http://localhost:3000**
+
+You should see the game's beautiful login/register interface!
+
+**First Time Setup:**
+1. Click "Register here" to create an account
+2. Fill in email, username (3-20 chars), and password (min 8 chars)
+3. After registration, login with your credentials
+4. You'll see the user dashboard with your stats
+
+### 8. Test the API (Optional)
+
+If you want to test the API directly:
 
 **Get all card templates:**
 ```bash
 curl http://localhost:3000/api/cards/templates
 ```
 
-**Get only legendary cards:**
+**Register a user via API:**
 ```bash
-curl http://localhost:3000/api/cards/templates?rarity=legendary
-```
-
-**Get fire element cards:**
-```bash
-curl http://localhost:3000/api/cards/templates?element=fire
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "username": "testuser",
+    "password": "password123"
+  }'
 ```
 
 ## Verify Installation
@@ -141,10 +156,17 @@ curl http://localhost:3000/api/cards/templates?element=fire
 Visit these URLs in your browser:
 
 1. **Main page**: http://localhost:3000
-   - Should show "Linh Triều Bình Ca - Coming Soon"
+   - Should show the game UI with login/register forms
+   - Beautiful gradient background with card game theme
 
 2. **Card Templates API**: http://localhost:3000/api/cards/templates
    - Should return JSON with 11 card templates
+
+3. **Test the game flow:**
+   - Register a new account
+   - Login to see your dashboard
+   - View your stats: Energy (50/50), Gold (1000), Level (1)
+   - Note: You won't have any cards yet - they need to be granted through battles or admin commands
 
 ## Common Issues and Solutions
 
@@ -227,14 +249,24 @@ Now that you have the foundation running, explore:
 2. **Architecture Guide**: `ARCHITECTURE.md`
 3. **API Documentation**: See README.md for endpoint details
 
-### Suggested Learning Path
+### Playing the Game
 
-1. ✅ You've completed: Basic setup and seeding
-2. 📚 Read: ARCHITECTURE.md to understand the system
-3. 🔍 Explore: The three model files to understand data structure
-4. 🛠️ Next: Implement authentication (register/login)
-5. 🎮 Then: Build card management features
-6. ⚔️ Finally: Create the battle system
+Now you can enjoy the full game experience:
+
+1. ✅ **Register & Login** - Create your account and login
+2. 🎴 **Card Collection** - View and manage your cards (need to grant yourself cards via admin tools or win battles)
+3. 📋 **Deck Builder** - Build your battle deck with your favorite cards
+4. ⚔️ **Battle** - Fight AI opponents in PvE mode
+5. 📊 **View History** - Check your battle records and stats
+
+### Game Features Available
+
+- **Energy System**: Regenerates 1 point every 5 minutes (max 50)
+- **Card Fusion**: Combine cards to make them stronger (costs 5 energy)
+- **PvE Battles**: Fight AI opponents (costs 10 energy)
+- **PvP Battles**: Challenge other players (costs 10 energy)
+- **Deck Management**: Build decks up to any size
+- **Card Locking**: Protect important cards from fusion
 
 ## Need Help?
 
@@ -263,15 +295,34 @@ npm run postinstall     # Regenerate Nuxt types
 
 ## Success! 🎉
 
-You're now ready to start developing the Linh Triều Bình Ca game!
+You're now playing the Linh Triều Bình Ca game!
 
-The foundation is set with:
-- ✅ Nuxt 3 framework
-- ✅ MongoDB connection
-- ✅ Three core models (User, CardTemplate, UserCard)
-- ✅ API endpoints for cards
-- ✅ 11 initial card templates
+**What's Included:**
+- ✅ Full authentication system (register/login/logout)
+- ✅ User dashboard with live stats
+- ✅ Card collection viewer with filtering
+- ✅ Deck builder with drag-and-drop style
+- ✅ Battle system (PvE and PvP)
+- ✅ Battle history tracking
 - ✅ Energy regeneration system
-- ✅ Card fusion mechanics
+- ✅ Card fusion/enhancement mechanics
+- ✅ Responsive and beautiful UI
+- ✅ 11 initial card templates
+- ✅ Complete REST API
 
-Happy coding! 🚀
+**Game Models:**
+- User (authentication, stats, energy)
+- CardTemplate (master card data)
+- UserCard (player-owned cards)
+- Battle (battle history and results)
+
+**API Endpoints:**
+- `/api/auth/*` - Authentication
+- `/api/cards/*` - Card templates
+- `/api/user/cards/*` - User cards
+- `/api/battle/*` - Battle system
+- `/api/admin/*` - Admin tools
+
+See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for complete API reference.
+
+Happy gaming! 🚀
